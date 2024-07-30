@@ -2,4 +2,6 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="purple">#CE27F4</color>
+    <color name="cardBack">#6670AFF3</color>
 </resources>
