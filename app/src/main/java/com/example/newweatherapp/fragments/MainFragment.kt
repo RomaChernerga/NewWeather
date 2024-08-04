@@ -1,6 +1,7 @@
 package com.example.newweatherapp.fragments
 
 import android.Manifest
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -17,14 +18,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 class MainFragment : Fragment() {
     private lateinit var pLauncher : ActivityResultLauncher<String>
     private lateinit var binding: FragmentMainBinding
-    private val fragmentList = listOf(
-        HoursFragment.newInstance(),
-        DaysFragment.newInstance()
-    )
-    private val textList = listOf(
-        "Hours",
-        "Days",
-    )
+    private val fragmentList = listOf(HoursFragment.newInstance(), DaysFragment.newInstance())
+    private val textList = listOf("Hours", "Days",)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,14 +37,15 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         checkPermission()
-        init()
+        initViewPager()
     }
 
-    private fun init() = with(binding) {
+    private fun initViewPager() = with(binding) {
         val viewPagerAdapter = ViewPagerAdapter(activity as FragmentActivity, fragmentList)
         viewPager.adapter = viewPagerAdapter
         TabLayoutMediator(tabLayout,viewPager) {
             tab, position -> tab.text = textList[position]
+
         }.attach()
     }
 
