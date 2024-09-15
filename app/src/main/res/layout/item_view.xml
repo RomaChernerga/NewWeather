@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:backgroundTint="@color/cardBack"
     android:layout_margin="3dp"
     app:cardCornerRadius="15dp"
@@ -42,19 +42,19 @@
             android:id="@+id/imView"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:background="@color/black"
+
             android:layout_marginEnd="10dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
         <TextView
-            android:id="@+id/tVew_temp"
+            android:id="@+id/t_view_temp"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:fontFamily="casual"
             android:gravity="center"
-            android:text="TEMP"
+            tools:text="TEMP"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/imView"

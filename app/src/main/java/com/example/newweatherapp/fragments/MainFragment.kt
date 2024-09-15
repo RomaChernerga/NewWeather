@@ -67,6 +67,7 @@ class MainFragment : Fragment() {
             Request.Method.GET,
             url,
             { result ->
+                 /** получаем стрингу - это JSON объект который потом передаем в метод */
                 parseWeatherData(result)
             },
             { error ->
@@ -78,12 +79,12 @@ class MainFragment : Fragment() {
 
     private fun parseWeatherData(result: String) {
         val mainObject = JSONObject(result)
-        val list = parseDays(mainObject)
-
+        val list = parseAllDays(mainObject)
         parseCurrentData(mainObject, list[0])
+        model.lifeDataList.value = list
     }
-
-    private fun parseDays(mainObject: JSONObject) : List<WeatherModel> {
+        /** Запрос данных списка погоды по дням  */
+    private fun parseAllDays(mainObject: JSONObject) : List<WeatherModel> {
         val dayList = ArrayList<WeatherModel>()
         val daysArray = mainObject.getJSONObject("forecast").getJSONArray("forecastday")
         val city = mainObject.getJSONObject("location").getString("name")
@@ -93,7 +94,7 @@ class MainFragment : Fragment() {
                 city,
                 day.getString("date"),
                 day.getJSONObject("day").getJSONObject("condition").getString("text"),
-                "",
+                day.getJSONObject("day").getString("maxtemp_c"),
                 day.getJSONObject("day").getString("maxtemp_c"),
                 day.getJSONObject("day").getString("mintemp_c"),
                 day.getJSONObject("day").getJSONObject("condition").getString("icon"),
@@ -103,7 +104,7 @@ class MainFragment : Fragment() {
         }
         return dayList
     }
-
+        /** Запрос данных для карточки на день  */
     private fun parseCurrentData(mainObject: JSONObject, weatherItem : WeatherModel) {
         val item = WeatherModel(
             mainObject.getJSONObject("location").getString("name"),
@@ -116,11 +117,10 @@ class MainFragment : Fragment() {
             weatherItem.hours
         )
         model.lifeDataCurrent.value = item
-//        Log.d("MyLog", item.maxTemp)
-//        Log.d("MyLog", item.minTemp)
-//        Log.d("MyLog", item.hours)
-    }
 
+
+    }
+        /** Обновление карточки с погодой на сегодня */
     private fun updateCurrentCard() = with(binding) {
         model.lifeDataCurrent.observe(viewLifecycleOwner) {
             val temp = "${it.maxTemp} C / ${it.minTemp} C"
@@ -158,7 +158,6 @@ class MainFragment : Fragment() {
             pLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         }
     }
-
 
     companion object {
         @JvmStatic
