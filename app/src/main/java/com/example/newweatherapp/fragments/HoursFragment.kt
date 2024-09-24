@@ -37,24 +37,17 @@ class HoursFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecView()
-
-
     }
 
 
     private fun initRecView() = with(binding) {
-        adapter = WeatherAdapter()
+        adapter = WeatherAdapter(null)
         rcView.adapter = adapter
         rcView.layoutManager = LinearLayoutManager(activity)
         rcView.setHasFixedSize(true)
         model.lifeDataCurrent.observe(viewLifecycleOwner){
             adapter.submitList(getHoursList(it))
-            Log.d("MyLog", "Time - ${it}")
-
-
         }
-
-
     }
 
     /** запрашиваем погоду по часам */
@@ -72,12 +65,8 @@ class HoursFragment : Fragment() {
                 (hoursArray[i] as JSONObject).getJSONObject("condition").getString("icon"),
                 ""
             )
-//            Log.d("MyLog", "Time - ${item.time}")
-//            Log.d("MyLog", "currentTemp - ${item.currentTemp}")
-//            Log.d("MyLog", "condition - ${item.condition}")
             list.add(item)
         }
-        model.lifeDaysList.value = list
         return list
     }
 

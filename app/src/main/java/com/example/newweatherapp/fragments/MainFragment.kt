@@ -67,7 +67,7 @@ class MainFragment : Fragment() {
             Request.Method.GET,
             url,
             { result ->
-                 /** получаем стрингу - это JSON объект который потом передаем в метод */
+                /** получаем стрингу - это JSON объект который потом передаем в метод */
                 parseWeatherData(result)
             },
             { error ->
@@ -83,8 +83,9 @@ class MainFragment : Fragment() {
         parseCurrentData(mainObject, list[0])
         model.lifeDataList.value = list
     }
-        /** Запрос данных списка погоды по дням  */
-    private fun parseAllDays(mainObject: JSONObject) : List<WeatherModel> {
+
+    /** Запрос данных списка погоды по дням  */
+    private fun parseAllDays(mainObject: JSONObject): List<WeatherModel> {
         val dayList = ArrayList<WeatherModel>()
         val daysArray = mainObject.getJSONObject("forecast").getJSONArray("forecastday")
         val city = mainObject.getJSONObject("location").getString("name")
@@ -94,18 +95,20 @@ class MainFragment : Fragment() {
                 city,
                 day.getString("date"),
                 day.getJSONObject("day").getJSONObject("condition").getString("text"),
-                day.getJSONObject("day").getString("maxtemp_c"),
-                day.getJSONObject("day").getString("maxtemp_c"),
-                day.getJSONObject("day").getString("mintemp_c"),
+                "",
+                day.getJSONObject("day").getString("maxtemp_c").toFloat().toInt().toString(),
+                day.getJSONObject("day").getString("mintemp_c").toFloat().toInt().toString(),
                 day.getJSONObject("day").getJSONObject("condition").getString("icon"),
                 day.getJSONArray("hour").toString()
             )
             dayList.add(dayItem)
         }
+        model.lifeDataList.value = dayList
         return dayList
     }
-        /** Запрос данных для карточки на день  */
-    private fun parseCurrentData(mainObject: JSONObject, weatherItem : WeatherModel) {
+
+    /** Запрос данных для карточки на день  */
+    private fun parseCurrentData(mainObject: JSONObject, weatherItem: WeatherModel) {
         val item = WeatherModel(
             mainObject.getJSONObject("location").getString("name"),
             mainObject.getJSONObject("current").getString("last_updated"),
@@ -117,18 +120,17 @@ class MainFragment : Fragment() {
             weatherItem.hours
         )
         model.lifeDataCurrent.value = item
-
-
     }
-        /** Обновление карточки с погодой на сегодня */
+
+    /** Обновление карточки с погодой на сегодня */
     private fun updateCurrentCard() = with(binding) {
         model.lifeDataCurrent.observe(viewLifecycleOwner) {
-            val temp = "${it.maxTemp} C / ${it.minTemp} C"
+            val maxMinTemp = "${it.maxTemp} C / ${it.minTemp} C"
             tViewTime.text = it.time
             tViewCity.text = it.city
+            tViewTemp.text = it.currentTemp.ifEmpty { maxMinTemp }
             tViewCond.text = it.condition
-            tViewTemp.text = it.currentTemp
-            tViewMaxMinTemp.text = temp
+            tViewMaxMinTemp.text = if (it.currentTemp.isEmpty())"" else maxMinTemp
             Picasso.get().load("https:" + it.imageUrl).into(imView)
         }
     }
