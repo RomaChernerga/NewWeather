@@ -54,6 +54,8 @@ class WeatherAdapter(val listener : Listener?) : ListAdapter<WeatherModel, Weath
         fun onClick(item : WeatherModel)
     }
 
+
+
 }
 
 
